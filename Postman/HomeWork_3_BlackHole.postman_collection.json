@@ -1,0 +1,376 @@
+{
+	"info": {
+		"_postman_id": "d1933475-209d-4dd1-91ab-c13a2d12a5b2",
+		"name": "HomeWork_3_BlackHole",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19679521"
+	},
+	"item": [
+		{
+			"name": "user_info_2 ***4",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// проверить присутствие всех параметров в респонсе\r",
+							"const resp = pm.response.json()\r",
+							"const reqSalary = +pm.request.url.query.get(\"salary\")\r",
+							"let req = request.data\r",
+							"\r",
+							"let arr = []\r",
+							"for (const key in resp){  // формируем массив из ключей JSON\r",
+							"    arr.push(key)\r",
+							"}\r",
+							"\r",
+							"arr.forEach(item => {\r",
+							"    pm.test(`Response have a ${item}`), function() {\r",
+							"        pm.expect(resp).to.have.property(item)\r",
+							"    }\r",
+							"})\r",
+							"\r",
+							"// проверяем корректность формул для расчета salary в ответе с использованием массива данных\r",
+							"const count = ['', 3.3, 2.7, 3.8, 2, 1]     // пустота, чтобы обойти person\r",
+							"\r",
+							"count.forEach((item, i) => {\r",
+							"    if (arr[i] != \"person\")     // чтобы не тестить person\r",
+							"    pm.test(`${resp[arr[i]]} == ${+req.salary} * ${item}`, function() {\r",
+							"        pm.expect(resp[arr[i]]).to.eql(+req.salary * item)\r",
+							"    })\r",
+							"})\r",
+							"\r",
+							"// то же самое, но красивее и проще\r",
+							"arr.forEach((item, i) =>{\r",
+							"    if (arr[i] != \"person\")\r",
+							"    pm.test(`${item} = ${req.salary * count[i]}`, function(){\r",
+							"        pm.expect(resp[item]).to.eql(req.salary * count[i])\r",
+							"    })\r",
+							"})\r",
+							"\r",
+							"// сразу два теста в одном - наличие ключей и корректность формул рассчета salary\r",
+							"\r",
+							"const counter = {           // создаём массиы с проверочными данными\r",
+							"    \"person\": \"\",\r",
+							"    \"qa_salary_after_1.5_year\": 3.3,\r",
+							"    \"qa_salary_after_12_months\": 2.7,\r",
+							"    \"qa_salary_after_3.5_years\": 3.8,\r",
+							"    \"qa_salary_after_6_months\": 2,\r",
+							"    \"start_qa_salary\": 1\r",
+							"}\r",
+							"\r",
+							"for (const key in counter) {        \r",
+							"    pm.test(`Response have ${key}`, function(){     // проверем наличие элементов\r",
+							"        pm.expect(resp).to.have.property(key)\r",
+							"    })\r",
+							"    if (key != \"person\") {      // обходим person\r",
+							"        pm.test(`${key} == ${req.salary} * ${counter[key]}`, function() {   // проверяем корректность формул\r",
+							"            pm.expect(resp[key]).to.eql(req.salary * counter[key])\r",
+							"        })\r",
+							"    }\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "Evgeny",
+							"type": "text"
+						},
+						{
+							"key": "age",
+							"value": "35",
+							"type": "text"
+						},
+						{
+							"key": "salary",
+							"value": "2000",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://162.55.220.72:5005/user_info_2",
+					"protocol": "http",
+					"host": [
+						"162",
+						"55",
+						"220",
+						"72"
+					],
+					"port": "5005",
+					"path": [
+						"user_info_2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user_info_2 ***4 Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// проверить присутствие всех параметров в респонсе\r",
+							"const resp = pm.response.json()\r",
+							"const reqSalary = +pm.request.url.query.get(\"salary\")\r",
+							"let req = request.data\r",
+							"\r",
+							"let arr = []\r",
+							"for (const key in resp){  // формируем массив из ключей JSON\r",
+							"    arr.push(key)\r",
+							"}\r",
+							"\r",
+							"arr.forEach(item => {\r",
+							"    pm.test(`Response have a ${item}`), function() {\r",
+							"        pm.expect(resp).to.have.property(item)\r",
+							"    }\r",
+							"})\r",
+							"\r",
+							"// проверяем корректность формул для расчета salary в ответе с использованием массива данных\r",
+							"const count = ['', 3.3, 2.7, 3.8, 2, 1]     // пустота, чтобы обойти person\r",
+							"\r",
+							"count.forEach((item, i) => {\r",
+							"    if (arr[i] != \"person\")     // чтобы не тестить person\r",
+							"    pm.test(`${resp[arr[i]]} == ${+req.salary} * ${item}`, function() {\r",
+							"        pm.expect(resp[arr[i]]).to.eql(+req.salary * item)\r",
+							"    })\r",
+							"})\r",
+							"\r",
+							"// то же самое, но красивее и проще\r",
+							"arr.forEach((item, i) =>{\r",
+							"    if (arr[i] != \"person\")\r",
+							"    pm.test(`${item} = ${req.salary * count[i]}`, function(){\r",
+							"        pm.expect(resp[item]).to.eql(req.salary * count[i])\r",
+							"    })\r",
+							"})\r",
+							"\r",
+							"// сразу два теста в одном - наличие ключей и корректность формул рассчета salary\r",
+							"\r",
+							"const counter = {           // создаём массиы с проверочными данными\r",
+							"    \"person\": \"\",\r",
+							"    \"qa_salary_after_1.5_year\": 3.3,\r",
+							"    \"qa_salary_after_12_months\": 2.7,\r",
+							"    \"qa_salary_after_3.5_years\": 3.8,\r",
+							"    \"qa_salary_after_6_months\": 2,\r",
+							"    \"start_qa_salary\": 1\r",
+							"}\r",
+							"\r",
+							"for (const key in counter) {        \r",
+							"    pm.test(`Response have ${key}`, function(){     // проверем наличие элементов\r",
+							"        pm.expect(resp).to.have.property(key)\r",
+							"    })\r",
+							"    if (key != \"person\") {      // обходим person\r",
+							"        pm.test(`${key} == ${req.salary} * ${counter[key]}`, function() {   // проверяем корректность формул\r",
+							"            pm.expect(resp[key]).to.eql(req.salary * counter[key])\r",
+							"        })\r",
+							"    }\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "Evgeny",
+							"type": "text"
+						},
+						{
+							"key": "age",
+							"value": "35",
+							"type": "text"
+						},
+						{
+							"key": "salary",
+							"value": "2000",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://162.55.220.72:5005/user_info_2",
+					"protocol": "http",
+					"host": [
+						"162",
+						"55",
+						"220",
+						"72"
+					],
+					"port": "5005",
+					"path": [
+						"user_info_2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "object_info_3 ***3",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// вытаскиваем переменные из URL запроса приводя в number\r",
+							"let reqSalary = +pm.request.url.query.get(\"salary\")\r",
+							"let reqAge = +pm.request.url.query.get(\"age\")\r",
+							"let reqName = pm.request.url.query.get(\"name\")\r",
+							"\r",
+							"// для уобства можно сделать массив из переменных\r",
+							"const reqObj = {\r",
+							"    name : reqName,\r",
+							"    age : reqAge,\r",
+							"    salary : reqSalary\r",
+							"}\r",
+							"\r",
+							"// вытаскиваем переменные из ответа\r",
+							"let respSalary = +pm.response.json().salary\r",
+							"let respAge = +pm.response.json().age\r",
+							"let respName = pm.response.json().name\r",
+							"\r",
+							"const respObj = {\r",
+							"    name : respName,\r",
+							"    age : respAge,\r",
+							"    salary : respSalary\r",
+							"}\r",
+							"\r",
+							"// сравниваем оба объекта\r",
+							"pm.test(\"respObj == reqObj\", function(){\r",
+							"    pm.expect(respObj).to.deep.eql(reqObj) // глубокое сравнение объекта - kay/value и тип данных\r",
+							"})\r",
+							"\r",
+							"\r",
+							"// можно собрать объект из ответа по ключам из запроса\r",
+							"const respObjNew = {}\r",
+							"for (key in respObj){\r",
+							"    if (!isNaN(pm.response.json()[key])){       // если value из ответа НЕ не номер, то приводим к номеру плюсом\r",
+							"        respObjNew[key] = +pm.response.json()[key]  // добавляем ключ в объект\r",
+							"    } else respObjNew[key] = pm.response.json()[key]\r",
+							"}\r",
+							"\r",
+							"// теперь сравниваем запрос с новым объектом\r",
+							"pm.test(\"respObjNew == reqObj\", function(){\r",
+							"    pm.expect(respObjNew).to.deep.eql(reqObj)\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://162.55.220.72:5005/object_info_3?name=Evgeny&age=35&salary=2000",
+					"protocol": "http",
+					"host": [
+						"162",
+						"55",
+						"220",
+						"72"
+					],
+					"port": "5005",
+					"path": [
+						"object_info_3"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Evgeny"
+						},
+						{
+							"key": "age",
+							"value": "35"
+						},
+						{
+							"key": "salary",
+							"value": "2000"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "object_info_4",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// вытаскиваем salary из запроса\r",
+							"let reqSalary = pm.request.url.query.get(\"salary\")\r",
+							"\r",
+							"// вытаскиваем salary из ответа\r",
+							"let respSalary = pm.response.json().salary\r",
+							"\r",
+							"// проверяем сразу все ответы salary циклом\r",
+							"respSalary.forEach((item, i) =>{\r",
+							"    pm.test(`reqSalary*${i+1} ${reqSalary} == respSalary ${item}`, function(){ // сделали \"красивые\" названия для тестов\r",
+							"        pm.expect(+reqSalary*(i+1)).to.eql(+item)\r",
+							"    })\r",
+							"})\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://162.55.220.72:5005/object_info_4?name=Evgeny&age=35&salary=2000",
+					"protocol": "http",
+					"host": [
+						"162",
+						"55",
+						"220",
+						"72"
+					],
+					"port": "5005",
+					"path": [
+						"object_info_4"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Evgeny"
+						},
+						{
+							"key": "age",
+							"value": "35"
+						},
+						{
+							"key": "salary",
+							"value": "2000"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
