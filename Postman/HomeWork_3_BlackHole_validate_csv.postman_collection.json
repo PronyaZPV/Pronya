@@ -1,0 +1,109 @@
+{
+	"info": {
+		"_postman_id": "35089748-cb12-48ff-9129-0cd77536cf96",
+		"name": "HomeWork_3_BlackHole_validate_csv",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19679521"
+	},
+	"item": [
+		{
+			"name": "user_info_2_validate_csv",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Тестирование эндпоинта на валидацию - привязка к типам данных!\r",
+							"// 1) Name: 3-40 символов включительно, запрещены префиксные и постфиксные пробелы. Поле обязательное\r",
+							"// Age: только целые цифры в диапазоне 18-120 включительно. Поле обязательное\r",
+							"// Salary: только целые цифры в диапазоне 1-1000000 включительно. Поле обязательное\r",
+							"\r",
+							"function nameValid(value){      // проверяем поле name\r",
+							"    if(value && value.length < 41 && value.length > 2 && value.trim() == value) {\r",
+							"    // если вообще присутвует, соответствует длине. trim убирает пробелы с краёв - если после trim value не поменялось, то TRUE\r",
+							"        return true\r",
+							"    } else return false\r",
+							"}\r",
+							"\r",
+							"function ageValid(value){       // проверяем поле age\r",
+							"    if(value && !isNaN(value) && value > 17 && value < 121 && Number.isInteger(+value)){\r",
+							"    // // если вообще присутвует, !isNaN(value)-не строка; соответствует границам. Number.isInteger(+value) - значение в формате INT, то есть не дробное\r",
+							"        return true\r",
+							"    } else return false\r",
+							"}\r",
+							"\r",
+							"function salaryValid(value){       // проверяем поле salary\r",
+							"    if(value && !isNaN(value) && value > 0 && value < 1000001 && Number.isInteger(+value)){\r",
+							"    // // если вообще присутвует, !isNaN(value)-не строка; соответствует границам. Number.isInteger(+value) - значение в формате INT, то есть не дробное\r",
+							"        return true\r",
+							"    } else return false\r",
+							"}\r",
+							"\r",
+							"function validator(){       // функция проверет, если все три функции возвращают true, то передается true\r",
+							"    return nameValid(name) && ageValid(age) && salaryValid(salary) ? true : false\r",
+							"}\r",
+							"\r",
+							"// ниже берет данные из подкрепленного файла *.csv\r",
+							"let name = pm.iterationData.get('name')\r",
+							"let age = pm.iterationData.get('age')\r",
+							"let salary = pm.iterationData.get('salary')\r",
+							"\r",
+							"// ниже сам тест\r",
+							"if(validator()) {   // позитивные проверки, если функция validator - true, то ждём статус 200\r",
+							"    pm.test(`Expect status 200 with name = \"${name}\", age = \"${age}\", salary = \"${salary}\"`, () => {\r",
+							"        pm.response.to.have.status(200);\r",
+							"    })\r",
+							"} else {    // // нешативные проверки, если функция validator - false, то ждём статус НЕ 200\r",
+							"    pm.test(`Expect NOT to have status 200 with name = \"${name}\", age = \"${age}\", salary = \"${salary}\"`, () => {\r",
+							"        pm.response.to.not.have.status(200);\r",
+							"    })\r",
+							"}\r",
+							"\r",
+							"console.log(`name = \"${name}\", age = \"${age}\", salary = \"${salary}\"`)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "{{name}}",
+							"type": "text"
+						},
+						{
+							"key": "age",
+							"value": "{{age}}",
+							"type": "text"
+						},
+						{
+							"key": "salary",
+							"value": "{{salary}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://162.55.220.72:5005/user_info_2",
+					"protocol": "http",
+					"host": [
+						"162",
+						"55",
+						"220",
+						"72"
+					],
+					"port": "5005",
+					"path": [
+						"user_info_2"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
