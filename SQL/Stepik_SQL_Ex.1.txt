@@ -38,7 +38,7 @@ SELECT title AS Название, author AS Автор, price AS Цена, amoun
 	ROUND(IF((30 - amount)/30 <= 0.54, price*0.45, IF((30 - amount)/30>=0.7, price*1, price*0.75)),2) AS Новая_цена
 FROM book ORDER BY Новая_цена DESC
 
-
+/*
 +---------+-----------------------+------------------+--------+--------+
 | book_id | title                 | author           | price  | amount |
 +---------+-----------------------+------------------+--------+--------+
@@ -145,7 +145,7 @@ FROM book ORDER BY income_percent DESC
 INSERT INTO book (title, author, price, amount) 
 SELECT title, author, price, amount FROM supply
 WHERE author NOT IN (SELECT author FROM book);
-
+/*
 +---------+-----------------------+------------------+--------+--------+-----+
 | book_id | title                 | author           | price  | amount | buy |
 +---------+-----------------------+------------------+--------+--------+-----+
@@ -155,12 +155,12 @@ WHERE author NOT IN (SELECT author FROM book);
 | 4       | Братья Карамазовы     | Достоевский Ф.М. | 799.01 | 2      | 0   |
 | 5       | Стихотворения и поэмы | Есенин С.А.      | 650.00 | 15     | 18  |
 +---------+-----------------------+------------------+--------+--------+-----+
-
+*/
 -- В таблице book необходимо скорректировать значение для покупателя в столбце buy таким образом, чтобы оно не превышало количество экземпляров книг, указанных в столбце amount. А цену тех книг, которые покупатель не заказывал, снизить на 10%.
 UPDATE book SET 
 	buy = IF(buy>amount, amount, buy), 
 	price = IF(buy=0, price*0.9, price);
-
+/*
 +---------+-----------------------+------------------+--------+--------+
 | book_id | title                 | author           | price  | amount |
 +---------+-----------------------+------------------+--------+--------+
@@ -179,7 +179,7 @@ UPDATE book SET
 | 3         | Белая гвардия  | Булгаков М.А.    | 540.50 | 7      |
 | 4         | Идиот          | Достоевский Ф.М. | 360.80 | 3      |
 +-----------+----------------+------------------+--------+--------+
-
+*/
 -- Удалить из таблицы supply книги тех авторов, общее количество экземпляров книг которых в таблице book превышает 10.
 DELETE FROM supply 
 WHERE author IN (SELECT author FROM book GROUP BY author HAVING SUM(amount) > 10);
@@ -189,3 +189,92 @@ WHERE author IN (SELECT author FROM book GROUP BY author HAVING SUM(amount) > 10
 CREATE TABLE ordering AS
 SELECT author, title, (SELECT ROUND(AVG(amount)) FROM book) AS amount FROM book
 WHERE amount < (SELECT ROUND(AVG(amount)) FROM book);
+/*
++---------+---------------+-----------------+----------+------------+------------+
+| trip_id | name          | city            | per_diem | date_first | date_last  |
++---------+---------------+-----------------+----------+------------+------------+
+| 1       | Баранов П.Е.  | Москва          | 700.00   | 2020-01-12 | 2020-01-17 |
+| 2       | Абрамова К.А. | Владивосток     | 450.00   | 2020-01-14 | 2020-01-27 |
+| 3       | Семенов И.В.  | Москва          | 700.00   | 2020-01-23 | 2020-01-31 |
+| 4       | Ильиных Г.Р.  | Владивосток     | 450.00   | 2020-01-12 | 2020-02-02 |
+| 5       | Колесов С.П.  | Москва          | 700.00   | 2020-02-01 | 2020-02-06 |
+| 6       | Баранов П.Е.  | Москва          | 700.00   | 2020-02-14 | 2020-02-22 |
+                          ...
+| 19      | Абрамова К.А. | Владивосток     | 450.00   | 2020-07-02 | 2020-07-13 |
+| 20      | Баранов П.Е.  | Воронеж         | 450.00   | 2020-07-19 | 2020-07-25 |
++---------+---------------+-----------------+----------+------------+------------+
+*/
+-- Вывести название месяца и количество командировок для каждого месяца. Считаем, что командировка относится к некоторому месяцу, если она началась в этом месяце. Информацию вывести сначала в отсортированном по убыванию количества, а потом в алфавитном порядке по названию месяца виде. Название столбцов – Месяц и Количество.
+SELECT MONTHNAME(date_first) AS Месяц, COUNT(date_first) AS Количество 
+FROM trip
+GROUP BY MONTHNAME(date_first)
+ORDER BY Количество DESC, Месяц
+
+-- Вывести сумму суточных (произведение количества дней командировки и размера суточных) для командировок, первый день которых пришелся на февраль или март 2020 года. Значение суточных для каждой командировки занесено в столбец per_diem. 
+-- Вывести фамилию и инициалы сотрудника, город, первый день командировки и сумму суточных. Последний столбец назвать Сумма. Информацию отсортировать сначала  в алфавитном порядке по фамилиям сотрудников, а затем по убыванию суммы суточных.
+SELECT name, city, date_first, 
+    DATEDIFF(date_last+1, date_first) * per_diem AS Сумма
+FROM trip
+WHERE MONTH(date_first) IN(2,3) AND YEAR(date_first) = 2020
+ORDER BY name, Сумма DESC
+
+-- Вывести фамилию с инициалами и общую сумму суточных, полученных за все командировки для тех сотрудников, которые были в командировках больше чем 3 раза, в отсортированном по убыванию сумм суточных виде. Последний столбец назвать Сумма.
+SELECT name, SUM(DATEDIFF(date_last+1, date_first) * per_diem) AS Сумма
+FROM trip GROUP BY name
+HAVING COUNT(*) > 3
+ORDER BY Сумма DESC
+
+/*
++---------------+--------+------------------------------+----------+----------------+--------------+
+| name          | number | violation                    | sum_fine | date_violation | date_payment |
+|               | _plate |                              |          |                |              |
++---------------+--------+------------------------------+----------+----------------+--------------+
+| Баранов П.Е.  | Р523ВТ | Превышение скорости(от 40... | 500.00   | 2020-01-12     | 2020-01-17   |
+| Абрамова К.А. | О111АВ | Проезд на запрещающий сигнал | 1000.00  | 2020-01-14     | 2020-02-27   |
+| Яковлев Г.Р.  | Т330ТТ | Превышение скорости(от 20... | 500.00   | 2020-01-23     | 2020-02-23   |
+| Яковлев Г.Р.  | М701АА | Превышение скорости(от 20... | 500.00   | 2020-01-12     | NULL         |
+| Колесов С.П.  | К892АХ | Превышение скорости(от 20... | 500.00   | 2020-02-01     | NULL         |
+| Баранов П.Е.  | Р523ВТ | Превышение скорости(от 40... | 1000.00  | 2020-02-14     | NULL         |
+| Абрамова К.А. | О111АВ | Проезд на запрещающий сигн...| 1000.00  | 2020-02-23     | NULL         |
+| Яковлев Г.Р.  | Т330ТТ | Проезд на запрещающий сигн...| 1000.00  | 2020-03-03     | NULL         |
++---------------+--------+------------------------------+----------+----------------+--------------+
+*/
+-- Вывести фамилию, номер машины и нарушение только для тех водителей, которые на одной машине нарушили одно и то же правило   два и более раз. При этом учитывать все нарушения, независимо от того оплачены они или нет. Информацию отсортировать в алфавитном порядке, сначала по фамилии водителя, потом по номеру машины и, наконец, по нарушению.
+SELECT name, number_plate, violation FROM fine
+GROUP BY name, number_plate, violation
+HAVING COUNT(*)>1
+ORDER BY name, number_plate, violation
+
+-- В таблице fine увеличить в два раза сумму неоплаченных штрафов для отобранных на предыдущем шаге записей. 
+-- 3 решения
+CREATE TABLE query_in AS 
+        SELECT name, number_plate, violation FROM fine
+        GROUP BY name, number_plate, violation
+        HAVING COUNT(*)>1;
+UPDATE fine f, query_in qi
+SET f.sum_fine = f.sum_fine * 2
+WHERE (f.name, f.number_plate, f.violation) = (qi.name, qi.number_plate, qi.violation) AND f.date_payment IS NULL;
+SELECT * FROM fine
+--
+UPDATE fine t, fine f SET t.sum_fine  = 2 * t.sum_fine 
+WHERE f.name=t.name
+   AND f.date_violation < t.date_violation 
+   AND t.violation = f.violation
+   AND t.number_plate = f.number_plate 
+   AND t.date_payment IS Null;
+--
+UPDATE  fine f, (SELECT name, number_plate, violation FROM fine
+                GROUP BY name, number_plate, violation
+                HAVING COUNT(*)>1) qi
+SET sum_fine = sum_fine * 2
+WHERE (f.name, f.number_plate, f.violation) = (qi.name, qi.number_plate, qi.violation) AND f.date_payment IS NULL
+
+-- Водители оплачивают свои штрафы. В таблице payment занесены даты их оплаты (payment_id | name | number_plate | violation | date_violation | date_payment)
+-- Необходимо:
+-- 	в таблицу fine занести дату оплаты соответствующего штрафа из таблицы payment; 
+-- 	уменьшить начисленный штраф в таблице fine в два раза  (только для тех штрафов, информация о которых занесена в таблицу payment) , если оплата произведена не позднее 20 дней со дня нарушения.
+UPDATE fine f, payment p 
+    SET f.date_payment = p.date_payment,
+        f.sum_fine = IF(DATEDIFF(p.date_payment,p.date_violation)<21, f.sum_fine * 0.5, f.sum_fine)
+WHERE (f.name, f.number_plate, f.violation, f.date_violation) = (p.name, p.number_plate, p.violation, p.date_violation) AND f.date_payment IS NULL;
+
