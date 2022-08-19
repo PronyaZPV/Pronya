@@ -1,4 +1,10 @@
-Чек-лист веб формы - https://docs.google.com/spreadsheets/d/1H7ibzc33DRBFhxf4WAxe-nQLLrlDXzc44NIYJ7KFLys/edit#gid=0
+Веб-форма:
+Чек-лист - https://docs.google.com/spreadsheets/d/1H7ibzc33DRBFhxf4WAxe-nQLLrlDXzc44NIYJ7KFLys/edit#gid=0
+Баг-репорты - https://docs.google.com/spreadsheets/d/1H7ibzc33DRBFhxf4WAxe-nQLLrlDXzc44NIYJ7KFLys/edit#gid=591266098
+
 
 Яндекс.Маршруты:
+https://qa-routes.praktikum-services.ru/
 
+Блок-схема расчета времени и цены поездки - https://drive.google.com/file/d/1rKEQnjnrcsnrOY0Ahexoqra116mZPj0k/view?usp=sharing
+Mind-map работы приложения - https://drive.google.com/file/d/1bQWFIKdHW78PERSplUvghkV3q0QXFHKJ/view?usp=sharing
