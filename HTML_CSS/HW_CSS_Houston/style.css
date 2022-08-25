@@ -1,0 +1,53 @@
+/*
+- Контент занимает ширину 45em.
+- Контент выровнен по середине.
+- Заголовки всех уровней выполнены шрифтом без засечек.
+- Верхний отступ заголовков установлен больше нижнего (например, 1.5em), чтобы соблюсти правило внутреннего и внешнего.
+- Заголовки первого уровня имеют размер 32px.
+- Таблицы имеют непрерывные границы чёрного цвета толщиной 1px.
+- Подписи под картинками выполены курсивом.
+- Картинки обтекаются текстом. Картинки справа, текст слева.
+- Свои доработки.
+*/
+
+body {
+  max-width: 45em;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #fff8dc;
+}
+
+h1, h2, h3 {
+  font-family: Arial, sans-serif;
+  margin-top: 1.5em;
+} 
+
+h1 {
+  font-size: 32px;
+}
+
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+figcaption {
+  font-style: italic;
+  text-align: center;
+}
+
+figure {
+  width: 250px;
+  float: right;
+  border: 10px solid #fff8dc;
+  margin: 20px 20px 30px 20px;
+}
+
+img {
+  width: 250px;
+  display:block;
+}
+
+caption {
+  white-space: nowrap;
+}
