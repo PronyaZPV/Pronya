@@ -1,0 +1,36 @@
+@media screen and (max-width: 600px) {
+    .name-cotacts{
+        display: inline;
+    }
+
+    .contacts {
+        display: inline;
+        max-width: 100%;
+        border: 2px solid black;
+        padding: 15px 15px 0px 15px;
+        background-color: bisque;
+        font-size: medium
+    } 
+    .foto {
+        height: 50vw;
+        width: auto;
+        border-radius: 100em;
+    }
+    body {
+        display: flex;
+        align-content: center;
+        flex-wrap: wrap;
+    } 
+
+    .name-content{
+        display: none;
+    }
+
+    .about-content{
+        display: inline;
+    }
+
+    .content {
+        max-width:100%;
+    }
+}
