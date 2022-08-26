@@ -70,11 +70,6 @@ span.period {
     font-size:80%;
 }
 
-span.study-period {
-    font-weight:normal;
-    font-size:90%;
-}
-
 .social-icons {
     display: flex;
     justify-content: left;
